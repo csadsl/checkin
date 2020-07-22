@@ -1,109 +1,103 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import urllib3
 import requests
+import time
 import json
+urllib3.disable_warnings()
 
-# 参加打卡活动，第一次或是中间断了签到后需要重新参加活动，才能打开领取会员
-'''
-URL: http://zt.wps.cn/2018/clock_in/api/sign_up?member=wps
-header:{
-    sid:
-}
-get url 
-'''
+def wps_invite():
 
-
-
-# wps接受邀请
-def wps_invite(sid: list, invite_userid: int) -> None:
-    invite_url = 'http://zt.wps.cn/2018/clock_in/api/invite'
-    s = requests.session()
-    for index, i in enumerate(sid):
-        headers = {
-            'sid': i
-        }
-        r = s.post(invite_url, headers=headers, data={
-                   'invite_userid': invite_userid})
-        print("ID={}, 状态码: {}, 请求信息{}".format(str(index+1).zfill(2), r.status_code, r.text))
-
-
-
-
-# wps签到
-def wps_clockin(sid: str) -> None:
-    getquestion_url = 'http://zt.wps.cn/2018/clock_in/api/get_question?member=wps'
-    s = requests.session()
-    # 打卡签到需要参加活动
-   
-    r = s.get(getquestion_url, headers={'sid': sid})
-    '''
-    {
-        "result": "ok",
-        "data": {
-            "multi_select": 1,
-            "options": [
-                "30天文档分享链接有效期",
-                "远程下载助手",
-                "输出长图片去水印",
-                "PDF转图片"
-            ],
-            "title": "以下哪些特权是WPS会员和超级会员共同拥有的？"
-        },
-        "msg": ""
+    sid = 'V02SYqwXnC7nmAtCvQqKJqpUrU6LkSY00a0a8a2600257bf8b1'
+    url = "https://zt.wps.cn/2018/clock_in/api/sign_up?member=wps"
+    headers = {
+        'Host': 'zt.wps.cn',
+        'content-type': 'application/json',
+        'sid': sid,
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
     }
-    '''
-    answer_set = {
-        'WPS会员全文检索',
-        '100G',
-        'WPS会员数据恢复',
-        'WPS会员PDF转doc',
-        'WPS会员PDF转图片',
-        'WPS图片转PDF插件',
-        '金山PDF转WORD',
-        'WPS会员拍照转文字',
-        '使用WPS会员修复',
-        'WPS全文检索功能',
-        '有，且无限次',
-        '文档修复'
-    }
-    resp = json.loads(r.text)
-    # print(resp['data']['multi_select'])
-    # 只做单选题 multi_select==1表示多选题
-    while resp['data']['multi_select'] == 1:
-        r = s.get(getquestion_url, headers={'sid': sid})
-        resp = json.loads(r.text)
-        # print(resp['data']['multi_select'])
+    r = requests.get(url=url, headers=headers, verify=False)
 
-    answer_id = 3
-    for i in range(4):
-        opt = resp['data']['options'][i]
-        if opt in answer_set:
-            answer_id = i+1
+    try:
+        html = json.loads(r.text)      
+        if html['result'] == 'ok':
+            msglog = '[-]   签到状态: ' + html['result']+" wps签到打卡成功！" + \
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+" \n\n"
+            return msglog
+        else:
+            msglog = '[*]    签到状态:' + html['result']+' : '+html['msg']+" " + \
+                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())+" \n\n"
+            return msglog
+    except Exception:
+        msglog = '[*]    请正确填写SID! \n\n'
+        return msglog
+
+def wps_sign_in():
+
+    userid = '628881585'
+    msgtextlog = ''
+    url = "https://zt.wps.cn/2018/clock_in/api/invite"
+    sids = [
+        "V02SC1mOHS0RiUBxeoA8NTliH2h2NGc00a803c35002693584d",
+        "V02StVuaNcoKrZ3BuvJQ1FcFS_xnG2k00af250d4002664c02f",
+        "V02SWIvKWYijG6Rggo4m0xvDKj1m7ew00a8e26d3002508b828",
+        "V02Sr3nJ9IicoHWfeyQLiXgvrRpje6E00a240b890023270f97",
+        "V02SBsNOf4sJZNFo4jOHdgHg7-2Tn1s00a338776000b669579",
+        "V02ScVbtm2pQD49ArcgGLv360iqQFLs014c8062e000b6c37b6",
+        "V02S2oI49T-Jp0_zJKZ5U38dIUSIl8Q00aa679530026780e96",
+        "V02ShotJqqiWyubCX0VWTlcbgcHqtSQ00a45564e002678124c",
+        "V02SFiqdXRGnH5oAV2FmDDulZyGDL3M00a61660c0026781be1",
+        "V02S7tldy5ltYcikCzJ8PJQDSy_ElEs00a327c3c0026782526",
+        "V02SPoOluAnWda0dTBYTXpdetS97tyI00a16135e002684bb5c",
+        "V02Sb8gxW2inr6IDYrdHK_ywJnayd6s00ab7472b0026849b17",
+        "V02SwV15KQ_8n6brU98_2kLnnFUDUOw00adf3fda0026934a7f",
+        "V02SBpDdos7QiFOs_5TOLF0a80pWt-U00a94ce2c003a814a17",
+    ]
+    i = 1
+    for sid in sids:
+        if i <= 13:
+            headers = {
+                'Host': 'zt.wps.cn',
+                'content-type': 'application/json',
+                'sid': sid,
+                'Accept-Encoding': 'gzip, deflate',
+                'Connection': 'close',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36'
+            }
+            r = requests.post(
+                url, headers=headers, data='{"invite_userid":"'+userid+'"}', verify=False)
+            time.sleep(0.5)
+            if r.status_code == 200:
+                msglog = "[-]    邀请{}位好友, 成功, 状态码: {}, sid: {}\n\n".format(
+                    i, r.status_code, sid)
+                i += 1
+                msgtextlog += msglog
+            else:
+                msglog = "[*]    邀请好友失败, 状态码: {}, sid: {}\n\n".format(
+                    r.status_code, sid)
+                msgtextlog += msglog
+        else:
             break
-    print("选项: {}".format(resp['data']['options']))
-    print("选择答案: {}".format(answer_id))
+    return msgtextlog
 
-    answer_url = 'http://zt.wps.cn/2018/clock_in/api/answer?member=wps'
-    # 提交答案
-    r = s.post(answer_url, headers={'sid': sid}, data={'answer': answer_id})
-    resp = json.loads(r.text)
-    # 答案错误
-    if resp['msg'] == 'wrong answer':
-        print("答案不对，挨个尝试")
-        for i in range(4):
-            r = s.post(answer_url, headers={'sid': sid}, data={'answer': i+1})
-            resp = json.loads(r.text)
-            print(i+1)
-            if resp['result'] == 'ok':
-                print(r.text)
-                break
+def main():
+    invite = wps_invite()
+    print(invite)
+    sign_in = wps_sign_in()
+    print(sign_in)
+    content = invite + sign_in
+    api = "https://sc.ftqq.com/SCU97675Tac37b68944a572c1508cc24b57883f395ebb7472e5103.send"
+    title = "WPS打卡通知"
+    data = {
+        "text": title,
+        "desp": content
+    }
+    req = requests.post(url=api, data=data)
 
-    # 打卡签到
-    clockin_url = 'http://zt.wps.cn/2018/clock_in/api/clock_in?member=wps'
-    r = s.get(clockin_url, headers={'sid': sid})
-    print("签到信息: {}".format(r.text))
-    resp = json.loads(r.text)
-    # 重新报名
-    if resp['msg'] == '前一天未报名':
-        print('前一天未报名，报名后第二天签到')
-        signup_url = 'http://zt.wps.cn/2018/clock_in/api/sign_up'
-        r=s.get(signup_url, headers={'sid': sid})
-        print(r.text)
+#腾讯云函数使用模块
+def main_handler(event, context):
+    return main()
+
+if __name__ == "__main__":
+    main()
