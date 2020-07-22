@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+#coding:utf-8
+import requests
+api = "https://sc.ftqq.com/{YOUR-KEY}.send"
+title = u"test"
+content = """
+#签到失败啦
+"""
+data = {
+      "text":title,
+      "desp":content
+      }
+req = requests.post(url=api,data = data)
