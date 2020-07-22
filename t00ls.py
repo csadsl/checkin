@@ -108,7 +108,7 @@ def t00ls_sign():
 
     info = [
         {
-            'username': 'T',  #论坛的用户名
+            'username': 'xxx',  #论坛的用户名
             'password': '7ffb0e',  #论坛密码的MD5
             'password_hash': True,  #上面password明文这里写False，使用MD5就True
             'questionid': '6',   #登录的验证问题

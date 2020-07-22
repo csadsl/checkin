@@ -49,10 +49,7 @@ def wps_invite(userid):
             continue
 
 def main():
-    userids = ['519001672',
-               '412118324',
-               '676796824',
-               '1002092310',
+    userids = ['5xxxxx72',
                ]
     for userid in userids:
         wps_invite(userid)

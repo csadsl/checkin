@@ -20,7 +20,7 @@ def noteyoudao(YNOTE_SESS: str, user: str, passwd: str):
         space = info['space'] / 1048576
         t = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(info['time'] / 1000))
         print(user+'签到成功，本次获取'+str(space) +'M, 总共获取'+str(total)+'M, 签到时间'+str(t))
-        api = "https://sc.ftqq.com/SCU97675Tac37b68944a572c1508cc24b57883f395ebb7472e5103.send"
+        api = "https://sc.ftqq.com/"  #server酱地址
         title = u"有道云笔记签到成功"
         content = user+'签到成功，本次获取'+str(space) +'M, 总共获取'+str(total)+'M, 签到时间'+str(t)
         data = {

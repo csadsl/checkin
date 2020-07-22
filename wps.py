@@ -9,7 +9,7 @@ urllib3.disable_warnings()
 
 def wps_invite():
 
-    sid = 'V02SYqwXnC7nmAtCvQqKJqpUrU6LkSY00a0a8a2600257bf8b1'
+    sid = 'V02SYqwxxxxxxxxxxxxxx'
     url = "https://zt.wps.cn/2018/clock_in/api/sign_up?member=wps"
     headers = {
         'Host': 'zt.wps.cn',
@@ -35,7 +35,7 @@ def wps_invite():
 
 def wps_sign_in():
 
-    userid = '628881585'
+    userid = '6xxxxxx585'
     msgtextlog = ''
     url = "https://zt.wps.cn/2018/clock_in/api/invite"
     sids = [
@@ -87,7 +87,7 @@ def main():
     sign_in = wps_sign_in()
     print(sign_in)
     content = invite + sign_in
-    api = "https://sc.ftqq.com/SCU97675Tac37b68944a572c1508cc24b57883f395ebb7472e5103.send"
+    api = "https://sc.ftqq.com/xxxxxxxxx.send"
     title = "WPS打卡通知"
     data = {
         "text": title,
